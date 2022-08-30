@@ -50,3 +50,24 @@ input {
 .name {
     min-width: fit-content;
 }
+
+.next100button {
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.next100button button {
+    background: blue;
+    color: white;
+    padding: 0.5rem 3rem;
+    border: 0;
+    border-radius: 0.5rem;
+    margin: 1rem;
+}
+
+.next100button button:hover {
+    background: rgb(71, 71, 248);
+}
