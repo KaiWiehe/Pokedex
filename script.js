@@ -2,10 +2,24 @@ let pokemonLimit = 10;
 let pokemonLimitStart = 0;
 let pokemonNameAndUrlList = []; // Only the Names and the Url's
 let loadedPokemon = []; // All Infos and Img's ...
+let searchedGlobalPokemon = [];
 
 async function loadAllPokemon() {
     await download();
     renderPokeDeck();
+
+    let input = document.getElementById("searchGlobal");
+
+    input.addEventListener('keydown', (KeyboardEvent) => {
+
+        if (KeyboardEvent.code === "Enter") {
+
+            searcheGlobalPokemon();
+
+            //console.log(input.value);
+            //console.log(KeyboardEvent);
+        }
+    })
 }
 
 function renderPokeDeck() {
@@ -99,6 +113,37 @@ function loadSearchedPokemon(i) {
     changeColor(pokemon, i);
 }
 
+async function searcheGlobalPokemon() {
+    let input = document.getElementById('searchGlobal').value;
+    input = input.toLowerCase();
+    let url = `https://pokeapi.co/api/v2/pokemon/${input}` // Setzt die URl von allen Pokemon fest, grade auf 100 limitiert
+    let response = await fetch(url); // Lädt die "Datei" als String herunter
+    let pokemon = await response.json(); // Wandelt diese in ein JSON um
+
+    searchedGlobalPokemon.push(pokemon);
+
+    if (input.length > 0) {
+        showSearchedGlobalPokemon();
+        searchedGlobalPokemon = [];
+    } else {
+        searchedGlobalPokemon = [];
+        let card = document.getElementById('cardContainer');
+        card.innerHTML = '';
+        renderPokeDeck();
+    }
+}
+
+function showSearchedGlobalPokemon() {
+    let pokemon = searchedGlobalPokemon[0];
+    let card = document.getElementById('cardContainer');
+    let img = pokemon['sprites']['other']['dream_world']['front_default']; // Dort findet man im JSON das Bild 
+    let nameBig = capitalizeFirstLetter(pokemon['name']); // Damit der Name auch großgeschrieben wird
+    let i = 0;
+    card.innerHTML = '';
+
+    loadCard(card, img, nameBig, pokemon, i)
+}
+
 /** Guckt durch jede Karte und vergibt die passende Farbe je nach Type des Pokemon
  * @example 
  * Wenn der Type des Pokemon "Wasser" ist ändert die funktion die hintergrundfarbe zu Blau
@@ -178,7 +223,7 @@ function loadCard(card, img, nameBig, pokemon, i) {
     }
 }
 
-function next100() {
+function next10() {
     let card = document.getElementById('cardContainer');
     card.innerHTML = '';
 
@@ -193,7 +238,7 @@ function next100() {
     loadAllPokemon();
 }
 
-function back100() {
+function back10() {
     if (pokemonLimitStart === 0) {} else {
         let card = document.getElementById('cardContainer');
         card.innerHTML = '';

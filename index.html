@@ -17,11 +17,16 @@
 
 <body onload="loadAllPokemon()">
     <div class="search">
-        <input type="text" id="search" required onkeyup="search()" placeholder="Name...">
-        <!-- onkeyup ist wichtig, damit er die funktion auch beim gedrückt halten der taste nur einmal ausführt -->
+        <input type="text" id="search" required onkeyup="search()" placeholder="Durchsuche die angezeigte Liste">
+        <input type="text" id="searchGlobal" required placeholder="Durchsuche die globale Liste">
+        <!-- onkeyup ist wichtig, damit er die funktion auch beim gedrückt halten der taste nur einmal ausführt 
+        onclick="searcheGlobalPokemon()"-->
     </div>
     <div id="cardContainer" class="cardContainer"></div>
-    <div class="next100button"><button onclick="back100()">Back 100</button><button onclick="next100()">Next 100</button></div>
+    <div class="next100button"><button onclick="back10()">Back 10</button><button onclick="next10()">Next 10</button></div>
+
+    <script>
+    </script>
 </body>
 
 </html>
