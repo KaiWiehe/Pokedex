@@ -8,11 +8,12 @@ async function loadAllPokemon() {
     await download();
     renderPokeDeck();
 
-    let input = document.getElementById("searchGlobal");
 
-    input.addEventListener('keydown', (KeyboardEvent) => {
+    let input = document.getElementById("searchGlobal"); // das Zweite globale input feld
 
-        if (KeyboardEvent.code === "Enter") {
+    input.addEventListener('keydown', (KeyboardEvent) => { // mit dem befehl kann man auch das KeyboardEvent abfangen
+
+        if (KeyboardEvent.code === "Enter") { // nur wenn ich auch Enter drücke passiert das
 
             searcheGlobalPokemon();
 
@@ -115,22 +116,34 @@ function loadSearchedPokemon(i) {
 
 async function searcheGlobalPokemon() {
     let input = document.getElementById('searchGlobal').value;
-    input = input.toLowerCase();
+    input = input.toLowerCase(); // Damit groß und kleinschreibung egal ist
     let url = `https://pokeapi.co/api/v2/pokemon/${input}` // Setzt die URl von allen Pokemon fest, grade auf 100 limitiert
     let response = await fetch(url); // Lädt die "Datei" als String herunter
-    let pokemon = await response.json(); // Wandelt diese in ein JSON um
 
-    searchedGlobalPokemon.push(pokemon);
+    // Um den error abzufangen 
+    if (response.ok) { // Wenn alles klappt
+        console.log('👍')
+        let pokemon = await response.json(); // Wandelt diese in ein JSON um
+        searchedGlobalPokemon.push(pokemon); // pusht es in das Array searchedGlobalPokemon
 
-    if (input.length > 0) {
-        showSearchedGlobalPokemon();
-        searchedGlobalPokemon = [];
-    } else {
-        searchedGlobalPokemon = [];
+        if (input.length > 0) { // wenn das Input feld nicht leer ist, also wenn etwas drinne steht
+            showSearchedGlobalPokemon(); // Zeige nur das esuchte Pokemon
+            searchedGlobalPokemon = []; // Lösche das Array wieder, sonst zeigt er beim nächsten suchen immernoch das erste an
+        } else {
+            searchedGlobalPokemon = []; // Lösche das Array wieder, sonst zeigt er beim nächsten suchen immernoch das erste an
+            let card = document.getElementById('cardContainer');
+            card.innerHTML = '';
+            renderPokeDeck(); // Lädt ganz normal die pokemon
+        }
+    } else { // Bei einem Error
+        console.error("error 😒");
         let card = document.getElementById('cardContainer');
         card.innerHTML = '';
-        renderPokeDeck();
+        card.innerHTML = '<h1>Page not found 😒!</h1>';
     }
+
+
+
 }
 
 function showSearchedGlobalPokemon() {
@@ -142,6 +155,7 @@ function showSearchedGlobalPokemon() {
     card.innerHTML = '';
 
     loadCard(card, img, nameBig, pokemon, i)
+    changeColor(pokemon, i);
 }
 
 /** Guckt durch jede Karte und vergibt die passende Farbe je nach Type des Pokemon

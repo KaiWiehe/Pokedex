@@ -35,6 +35,7 @@ body {
 
 input {
     width: 15rem;
+    margin: 1rem;
 }
 
 .list-group-item {
